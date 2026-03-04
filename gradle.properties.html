@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>gradle.properties</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #808080;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+gradle.properties</font>
+</center></td></tr></table>
+<pre><span class="s0"># Done to increase the memory available to gradle.</span>
+<span class="s2">org.gradle.jvmargs</span><span class="s3">=</span><span class="s4">-Xmx1G</span>
+<span class="s2">org.gradle.parallel</span><span class="s3">=</span><span class="s4">true</span>
+
+<span class="s0"># IntelliJ IDEA is not yet fully compatible with configuration cache, see: https://github.com/FabricMC/fabric-loom/issues/1349</span>
+<span class="s2">org.gradle.configuration-cache</span><span class="s3">=</span><span class="s4">false</span>
+
+<span class="s0"># Fabric Properties</span>
+<span class="s0"># check these on https://fabricmc.net/develop</span>
+<span class="s2">minecraft_version</span><span class="s3">=</span><span class="s4">1.21</span>
+<span class="s2">yarn_mappings</span><span class="s3">=</span><span class="s4">1.21+build.9</span>
+<span class="s2">loader_version</span><span class="s3">=</span><span class="s4">0.18.4</span>
+<span class="s2">loom_version</span><span class="s3">=</span><span class="s4">1.15-SNAPSHOT</span>
+
+<span class="s0"># Mod Properties</span>
+<span class="s2">mod_version</span><span class="s3">=</span><span class="s4">1.0.0</span>
+<span class="s2">maven_group</span><span class="s3">=</span><span class="s4">com.astrolddd.firstt</span>
+<span class="s2">archives_base_name</span><span class="s3">=</span><span class="s4">firstt</span>
+
+<span class="s0"># Dependencies</span>
+<span class="s2">fabric_api_version</span><span class="s3">=</span><span class="s4">0.102.0+1.21</span></pre>
+</body>
+</html>

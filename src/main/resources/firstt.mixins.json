@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "com.astrolddd.firstt.mixin",
+	"compatibilityLevel": "JAVA_21",
+    "client": [
+    "InGameHudMixin"
+    ],
+	"mixins": [
+		"ExampleMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
