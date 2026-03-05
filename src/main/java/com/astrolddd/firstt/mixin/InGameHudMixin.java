@@ -1,5 +1,6 @@
 package com.astrolddd.firstt.mixin;
 
+import com.astrolddd.firstt.client.CrosshairData;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,9 +17,9 @@ public class InGameHudMixin {
         }
     }
     private boolean hasCustomCrosshair() {
-        for (int x = 0; x < com.astrolddd.firstt.client.CrosshairData.SIZE; x++) {
-            for (int y = 0; y < com.astrolddd.firstt.client.CrosshairData.SIZE; y++) {
-                if (com.astrolddd.firstt.client.CrosshairData.pixels[x][y]) {
+        for (int x = 0; x < com.astrolddd.firstt.client.CrosshairData.GRID_SIZE; x++) {
+            for (int y = 0; y < CrosshairData.GRID_SIZE; y++) {
+                if (CrosshairData.grid[x][y]) {
                     return true;
                 }
             }

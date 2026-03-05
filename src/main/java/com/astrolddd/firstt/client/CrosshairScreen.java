@@ -2,103 +2,201 @@ package com.astrolddd.firstt.client;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
 
 public class CrosshairScreen extends Screen {
 
-    private final int pixelSize = 12;
-    private int sliderWidth = 100;
+    private final int gridSize = 15;
+    private final int pixelSize = 14;
 
-    private int thicknessSliderY;
-    private int widthSliderY;
-    private int lengthSliderY;
-    private final int gridSize = CrosshairData.SIZE;
-    private int sliderX;
-    private boolean draggingSlider = false;
     protected CrosshairScreen() {
-        super(Text.literal("Draw Crosshair"));
+        super(Text.literal("Crosshair Editor"));
+    }
+
+    @Override
+    protected void init() {
+
+        int totalSize = gridSize * pixelSize;
+        int startX = (width - totalSize) / 2;
+        int startY = (height - totalSize) / 2;
+
+        int rightX = startX + totalSize + 30;
+        int sliderWidth = 150;
+
+        // THICKNESS
+        addDrawableChild(new SliderWidget(
+                rightX, startY, sliderWidth, 20,
+                Text.literal("Thickness"),
+                CrosshairData.thickness / 10.0
+        ) {
+            protected void updateMessage() {
+                int v = (int)(value * 10);
+                setMessage(Text.literal("Thickness: " + v));
+            }
+            protected void applyValue() {
+                CrosshairData.thickness = (int)(value * 10);
+            }
+        });
+
+        // WIDTH
+        addDrawableChild(new SliderWidget(
+                rightX, startY + 30, sliderWidth, 20,
+                Text.literal("Width"),
+                CrosshairData.width / 10.0
+        ) {
+            protected void updateMessage() {
+                int v = (int)(value * 10);
+                setMessage(Text.literal("Width: " + v));
+            }
+            protected void applyValue() {
+                CrosshairData.width = (int)(value * 10);
+            }
+        });
+
+        // LENGTH
+        addDrawableChild(new SliderWidget(
+                rightX, startY + 60, sliderWidth, 20,
+                Text.literal("Length"),
+                CrosshairData.length / 10.0
+        ) {
+            protected void updateMessage() {
+                int v = (int)(value * 10);
+                setMessage(Text.literal("Length: " + v));
+            }
+            protected void applyValue() {
+                CrosshairData.length = (int)(value * 10);
+            }
+        });
+
+        // CLEAR
+        addDrawableChild(ButtonWidget.builder(
+                Text.literal("Clear"),
+                b -> CrosshairData.clearGrid()
+        ).dimensions(rightX, startY + 100, sliderWidth, 20).build());
+
+        // SAVE
+        addDrawableChild(ButtonWidget.builder(
+                Text.literal("Save"),
+                b -> CrosshairConfig.save()
+        ).dimensions(rightX, startY + 130, sliderWidth, 20).build());
+
+        // RGB BELOW GRID
+        int centerX = width / 2;
+        int rgbY = startY + totalSize + 30;
+
+        addDrawableChild(createColorSlider(centerX - 160, rgbY, "Red", 16));
+        addDrawableChild(createColorSlider(centerX + 10, rgbY, "Green", 8));
+        addDrawableChild(createColorSlider(centerX - 75, rgbY + 30, "Blue", 0));
+    }
+
+    private SliderWidget createColorSlider(int x, int y, String name, int shift) {
+
+        double initial = ((CrosshairData.color >> shift) & 255) / 255.0;
+
+        return new SliderWidget(x, y, 150, 20,
+                Text.literal(name), initial) {
+
+            protected void updateMessage() {
+                int v = (int)(value * 255);
+                setMessage(Text.literal(name + ": " + v));
+            }
+
+            protected void applyValue() {
+
+                int r = (CrosshairData.color >> 16) & 255;
+                int g = (CrosshairData.color >> 8) & 255;
+                int b = CrosshairData.color & 255;
+
+                int nv = (int)(value * 255);
+
+                if (shift == 16) r = nv;
+                if (shift == 8) g = nv;
+                if (shift == 0) b = nv;
+
+                CrosshairData.color =
+                        (255 << 24) | (r << 16) | (g << 8) | b;
+            }
+        };
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.fill(0, 0, width, height, 0xCC000000);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, width, height, 0xCC000000);
+        super.render(context, mouseX, mouseY, delta);
 
-        context.getMatrices().push();
-        context.getMatrices().scale(1.0f, 1.0f, 1.0f);
         int totalSize = gridSize * pixelSize;
-
         int startX = (width - totalSize) / 2;
         int startY = (height - totalSize) / 2;
-        // 🔹 Dark panel background
-        int boxPadding = 12;
-        // Position sliders
-        sliderX = width / 2 - sliderWidth / 2;
 
-        // Sliders on right side of grid
-        int sliderStartX = startX + totalSize + 30;
-        sliderX = sliderStartX;
-
-        thicknessSliderY = startY + 20;
-        widthSliderY = thicknessSliderY + 30;
-        lengthSliderY = widthSliderY + 30;
-
-// Extend panel to include sliders area
-        int panelRight = sliderStartX + sliderWidth + 20;
-        int panelBottom = startY + totalSize + 20;
-
+        // PANEL
         context.fill(
                 startX - 12,
                 startY - 12,
-                startX + gridSize * pixelSize + boxPadding,
-                panelBottom,
+                startX + totalSize + 12,
+                startY + totalSize + 12,
                 0xCC111111
         );
 
+        // GRID
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
 
                 int drawX = startX + x * pixelSize;
                 int drawY = startY + y * pixelSize;
 
-                boolean isCenter =
-                        x == gridSize / 2 &&
-                                y == gridSize / 2;
+                int center = gridSize / 2;
 
                 int color;
-
-                if (CrosshairData.pixels[x][y]) {
-                    color = 0xFFFFFFFF; // white drawn pixel
-                } else if (isCenter) {
-                    color = 0xFF8888AA; // soft bluish center guide
+                if (CrosshairData.grid[x][y]) {
+                    color = CrosshairData.color;
                 } else {
-                    color = 0xFF444444; // darker background
+                    color = 0xFF333333;
                 }
 
                 context.fill(drawX, drawY,
-                        drawX + pixelSize,
-                        drawY + pixelSize,
+                        drawX + pixelSize - 1,
+                        drawY + pixelSize - 1,
                         color);
-                // Top
-                context.fill(drawX, drawY, drawX + pixelSize, drawY + 1, 0xFF000000);
-
-// Bottom
-                context.fill(drawX, drawY + pixelSize - 1, drawX + pixelSize, drawY + pixelSize, 0xFF000000);
-
-// Left
-                context.fill(drawX, drawY, drawX + 1, drawY + pixelSize, 0xFF000000);
-
-// Right
-                context.fill(drawX + pixelSize - 1, drawY, drawX + pixelSize, drawY + pixelSize, 0xFF000000);
             }
         }
+        int center = CrosshairData.GRID_SIZE / 2;
 
-        drawSlider(context, thicknessSliderY, CrosshairData.thickness, "Thickness");
-        drawSlider(context, widthSliderY, CrosshairData.width, "Width");
-        drawSlider(context, lengthSliderY, CrosshairData.length, "Length");
-        context.getMatrices().pop();
-        super.render(context, mouseX, mouseY, delta);
+        if (CrosshairData.centerVisible) {
+
+
+
+            int cx = startX + center * pixelSize;
+            int cy = startY + center * pixelSize;
+
+            int translucentRed = 0x55FF0000;
+
+            context.fill(
+                    cx,
+                    cy,
+                    cx + pixelSize - 1,
+                    cy + pixelSize - 1,
+                    translucentRed
+            );
+        }
+
+        // COLOR PREVIEW
+        int previewX = startX + totalSize + 100;
+        int previewY = startY + totalSize + 50;
+
+        context.fill(previewX - 2, previewY - 2,
+                previewX + 32, previewY + 32,
+                0xFF000000);
+
+        context.fill(previewX, previewY,
+                previewX + 30, previewY + 30,
+                CrosshairData.color);
     }
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
@@ -106,73 +204,28 @@ public class CrosshairScreen extends Screen {
         int startX = (width - totalSize) / 2;
         int startY = (height - totalSize) / 2;
 
-        // ===== GRID CLICK DETECTION =====
-        if (mouseX >= startX && mouseX < startX + totalSize &&
-                mouseY >= startY && mouseY < startY + totalSize) {
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
 
-            int gridX = (int)((mouseX - startX) / pixelSize);
-            int gridY = (int)((mouseY - startY) / pixelSize);
+                int drawX = startX + x * pixelSize;
+                int drawY = startY + y * pixelSize;
 
-            CrosshairData.pixels[gridX][gridY] =
-                    !CrosshairData.pixels[gridX][gridY];
+                if (mouseX >= drawX && mouseX < drawX + pixelSize &&
+                        mouseY >= drawY && mouseY < drawY + pixelSize) {
+                    int center = CrosshairData.GRID_SIZE / 2;
 
-            return true;
+                    if (x == center && y == center && CrosshairData.centerVisible) {
+                        CrosshairData.centerVisible = false;
+                        return true;
+                    }
+                    CrosshairData.grid[x][y] =
+                            !CrosshairData.grid[x][y];
+
+                    return true;
+                }
+            }
         }
-
-        // ===== SLIDERS =====
-        if (handleSlider(mouseX, mouseY, thicknessSliderY, "thickness")) return true;
-        if (handleSlider(mouseX, mouseY, widthSliderY, "width")) return true;
-        if (handleSlider(mouseX, mouseY, lengthSliderY, "length")) return true;
 
         return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    private boolean handleSlider(double mouseX, double mouseY, int sliderY, String type) {
-
-        if (mouseY >= sliderY - 5 && mouseY <= sliderY + 10) {
-
-            int relative = (int) (mouseX - sliderX);
-            int value = relative / 10 + 1;
-
-            if (value >= 1 && value <= 10) {
-
-                if (type.equals("thickness"))
-                    CrosshairData.thickness = value;
-
-                if (type.equals("width"))
-                    CrosshairData.width = value;
-
-                if (type.equals("length"))
-                    CrosshairData.length = value;
-            }
-
-            return true;
-        }
-
-        return false;
-
-    }
-private void drawSlider(DrawContext context, int y, int value, String label) {
-
-    context.fill(sliderX, y,
-            sliderX + sliderWidth,
-            y + 6,
-            0xFF333333);
-
-    int knobX = sliderX + (value - 1) * 10;
-
-    context.fill(knobX, y - 4,
-            knobX + 10,
-            y + 10,
-            0xFFFFFFFF);
-
-    context.drawText(
-            textRenderer,
-            label + ": " + value,
-            sliderX,
-            y - 18,
-            0xFFFFFF,
-            false
-      );
     }
 }
