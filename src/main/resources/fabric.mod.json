@@ -3,13 +3,14 @@
 	"id": "firstt",
 	"version": "${version}",
 	"name": "firstt",
-	"description": "This is my first mod i don't know much",
+	"description": "This is a crosshair mod enabling you to do many simple and useful thing like changing colour, size, thickness width length.",
+
 	"authors": [
 		"AstroLDDD"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/astrolddd/simplecrosshair-1.21"
+		"sources": "https://github.com/astrolddd/simplecrosshair1.21"
 	},
 	"license": "MIT",
 	"icon": "assets/firstt/icon.png",
