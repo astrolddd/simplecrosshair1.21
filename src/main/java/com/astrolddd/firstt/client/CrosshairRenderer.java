@@ -3,6 +3,9 @@ package com.astrolddd.firstt.client;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.entity.Entity;
+import net.minecraft.client.option.AttackIndicator;
 
 public class CrosshairRenderer {
 
@@ -14,6 +17,21 @@ public class CrosshairRenderer {
 
     private static void render(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
+
+        int color = CrosshairData.color;
+
+        if (CrosshairData.attackIndicatorEnabled &&
+                client.crosshairTarget instanceof EntityHitResult hit) {
+
+            Entity entity = hit.getEntity();
+
+            if (client.player != null &&
+                    client.player.distanceTo(entity) <= 3.0F) {
+
+                color = CrosshairData.attackIndicatorColor;
+            }
+        }
+
         if (client.player == null) return;
 
         int centerX = client.getWindow().getScaledWidth() / 2;
@@ -39,26 +57,15 @@ public class CrosshairRenderer {
                             drawY,
                             drawX + thickness,
                             drawY + thickness,
-                            CrosshairData.color
+                            color
                     );
                 }
             }
         }
-        int gridSize = CrosshairData.GRID_SIZE;
-        int center = gridSize / 2;
 
-        for (int x = 0; x < gridSize; x++) {
-            for (int y = 0; y < gridSize; y++) {
 
-                if (x == center && y == center) {
-                    // draw highlighted center pixel
-                }
-
-                if (CrosshairData.pixels[x][y]) {
-                    int color = CrosshairData.colors[x][y];
-                    // draw the pixel
-                }
-            }
+        if (client.options.getAttackIndicator().getValue() != AttackIndicator.OFF) {
+            client.options.getAttackIndicator().setValue(AttackIndicator.OFF);
         }
     }
 }

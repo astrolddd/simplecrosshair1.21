@@ -21,7 +21,8 @@ public class CrosshairConfig {
     public int length = 2;
     public int color = 0xFFFFFFFF;
     public boolean[][] pixels = new boolean[CrosshairData.GRID_SIZE][CrosshairData.GRID_SIZE];
-
+    public boolean attackIndicatorEnabled = false;
+    public int attackIndicatorColor = 0xFFFFFFFF;
     public static void save() {
         try {
             CrosshairConfig config = new CrosshairConfig();
@@ -31,7 +32,8 @@ public class CrosshairConfig {
             config.length = CrosshairData.length;
             config.color = CrosshairData.color;
             config.pixels = CrosshairData.grid;
-
+            config.attackIndicatorEnabled = CrosshairData.attackIndicatorEnabled;
+            config.attackIndicatorColor = CrosshairData.attackIndicatorColor;
             FileWriter writer = new FileWriter(FILE);
             GSON.toJson(config, writer);
             writer.close();
@@ -48,7 +50,8 @@ public class CrosshairConfig {
             FileReader reader = new FileReader(FILE);
             CrosshairConfig config = GSON.fromJson(reader, CrosshairConfig.class);
             reader.close();
-
+            CrosshairData.attackIndicatorEnabled = config.attackIndicatorEnabled;
+            CrosshairData.attackIndicatorColor = config.attackIndicatorColor;
             CrosshairData.thickness = config.thickness;
             CrosshairData.width = config.width;
             CrosshairData.length = config.length;
