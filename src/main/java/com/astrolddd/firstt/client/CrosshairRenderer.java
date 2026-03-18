@@ -6,6 +6,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.option.AttackIndicator;
+import net.minecraft.entity.player.PlayerEntity;
+
 
 public class CrosshairRenderer {
 
@@ -17,22 +19,30 @@ public class CrosshairRenderer {
 
     private static void render(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-
+        if (client.player == null) return;
         int color = CrosshairData.color;
 
-        if (CrosshairData.attackIndicatorEnabled &&
-                client.crosshairTarget instanceof EntityHitResult hit) {
+        /*if (CrosshairData.attackIndicatorEnabled &&
+                client.crosshairTarget instanceof EntityHitResult hit &&
+                client.player != null &&
+                hit.getEntity() instanceof PlayerEntity target &&
+                hit.getEntity() != client.player) {
 
-            Entity entity = hit.getEntity();
+            double reach = 3.0;
 
-            if (client.player != null &&
-                    client.player.distanceTo(entity) <= 3.0F) {
+            if (client.interactionManager != null &&
+                    client.interactionManager.getCurrentGameMode().isCreative()) {
+                reach = 5.0;
+            }
 
+            double distance = hit.getPos().distanceTo(client.player.getCameraPosVec(1.0f));
+
+            if (distance <= reach) {
                 color = CrosshairData.attackIndicatorColor;
             }
-        }
+        }*/
 
-        if (client.player == null) return;
+
 
         int centerX = client.getWindow().getScaledWidth() / 2;
         int centerY = client.getWindow().getScaledHeight() / 2;

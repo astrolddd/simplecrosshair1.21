@@ -64,7 +64,7 @@ public class CrosshairScreen extends Screen {
 
         // ATTACK INDICATOR
 
-        addDrawableChild(ButtonWidget.builder(
+        /*addDrawableChild(ButtonWidget.builder(
                         Text.literal("Attack Indicator: " +
                                 (CrosshairData.attackIndicatorEnabled ? "ON" : "OFF")),
                         button -> {
@@ -78,7 +78,7 @@ public class CrosshairScreen extends Screen {
                             ));
                         })
                 .dimensions(gridX + totalSize / 2 - 70, gridY - 30, 140, 20)
-                .build());
+                .build());*/
 
         // CLEAR
 
@@ -143,7 +143,7 @@ public class CrosshairScreen extends Screen {
                         (255 << 24) | (r << 16) | (g << 8) | b;
 
                 CrosshairData.color = selectedColor;
-                CrosshairData.attackIndicatorColor = selectedColor;
+
             }
         };
     }

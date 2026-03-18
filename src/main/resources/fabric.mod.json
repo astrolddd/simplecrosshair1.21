@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "firstt",
+	"id": "Simple Crosshair Editor",
 	"version": "${version}",
 	"name": "firstt",
-	"description": "This is a crosshair mod enabling you to do many simple and useful thing like changing colour, size, thickness width length.",
+	"description": "Create and customize your own pixel-based crosshair in-game customizing almost every element of it.",
 
 	"authors": [
 		"AstroLDDD"
@@ -12,6 +12,9 @@
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/astrolddd/simplecrosshair1.21"
 	},
+  "suggests": {
+    "modmenu": "*"
+  },
 	"license": "MIT",
 	"icon": "assets/firstt/icon.png",
 	"environment": "*",
@@ -25,6 +28,11 @@
       "client": [
         "com.astrolddd.firstt.firsttmodclient"
 
+      ],
+
+
+      "modmenu": [
+        "com.astrolddd.firstt.client.ModMenuIntegration"
       ]
 	},
 	"mixins": [
@@ -36,4 +44,6 @@
 		"java": ">=21",
 		"fabric-api": "*"
 	}
-}
+
+
+  }

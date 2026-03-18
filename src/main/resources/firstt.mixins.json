@@ -6,7 +6,7 @@
     "InGameHudMixin"
     ],
 	"mixins": [
-		"ExampleMixin"
+
 	],
 	"injectors": {
 		"defaultRequire": 1
