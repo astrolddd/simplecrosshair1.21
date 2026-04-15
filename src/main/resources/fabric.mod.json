@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "Simple Crosshair Editor",
+	"id": "firstt",
 	"version": "${version}",
-	"name": "firstt",
+	"name": "Custom Crosshair Editor",
 	"description": "Create and customize your own pixel-based crosshair in-game customizing almost every element of it.",
 
 	"authors": [
@@ -38,12 +38,12 @@
 	"mixins": [
 		"firstt.mixins.json"
 	],
-	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": "1.21.10",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
 
 
   }
