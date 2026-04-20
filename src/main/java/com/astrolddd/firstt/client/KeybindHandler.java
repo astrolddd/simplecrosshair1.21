@@ -12,13 +12,12 @@ public class KeybindHandler {
     private static KeyBinding openGuiKey;
 
     public static void register() {
-
         openGuiKey = KeyBindingHelper.registerKeyBinding(
                 new KeyBinding(
                         "key.firstt.open_gui",
                         InputUtil.Type.KEYSYM,
                         GLFW.GLFW_KEY_X,
-                        KeyBinding.Category.create(Identifier.of("firstt", "category"))
+                        "key.categories.misc" // Use 'misc' or 'ui'—standard Yarn 1.21.4 uses Strings here
                 )
         );
 

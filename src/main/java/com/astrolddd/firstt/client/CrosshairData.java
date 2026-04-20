@@ -8,7 +8,7 @@ public class CrosshairData {
     public static boolean attackIndicatorEnabled = false;
     public static int attackIndicatorColor = 0xFFFFFFFF;
     public static int color = 0xFFFFFFFF;
-
+    public static boolean reachTintEnabled = true;
     public static final int GRID_SIZE = 15;
     public static boolean centerVisible = true;
     // 2D grid for editor
